@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local",
+  "command": "/usr/bin/c++ -I/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local -isystem /opt/homebrew/include -O3 -DNDEBUG -o CMakeFiles/crawler.dir/Frontier.cpp.o -c /Users/adityarayapudi/eclipse-workspace/Crawler/Frontier.cpp",
+  "file": "/Users/adityarayapudi/eclipse-workspace/Crawler/Frontier.cpp",
+  "output": "CMakeFiles/crawler.dir/Frontier.cpp.o"
+}
+]
