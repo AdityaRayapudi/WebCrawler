@@ -49,13 +49,37 @@ cmake_ninja_workdir = /Users/adityarayapudi/eclipse-workspace/Crawler/build/cmak
 
 build cmake_object_order_depends_target_crawler: phony || .
 
-build CMakeFiles/crawler.dir/Frontier.cpp.o: CXX_COMPILER__crawler_unscanned_Release /Users/adityarayapudi/eclipse-workspace/Crawler/Frontier.cpp || cmake_object_order_depends_target_crawler
+build CMakeFiles/crawler.dir/main.cpp.o: CXX_COMPILER__crawler_unscanned_Release /Users/adityarayapudi/eclipse-workspace/Crawler/main.cpp || cmake_object_order_depends_target_crawler
   CONFIG = Release
-  DEP_FILE = CMakeFiles/crawler.dir/Frontier.cpp.o.d
+  DEP_FILE = CMakeFiles/crawler.dir/main.cpp.o.d
   FLAGS = -O3 -DNDEBUG
-  INCLUDES = -I/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local -isystem /opt/homebrew/include
+  INCLUDES = -I/Users/adityarayapudi/eclipse-workspace/Crawler/include -I/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local -isystem /opt/homebrew/include
   OBJECT_DIR = CMakeFiles/crawler.dir
   OBJECT_FILE_DIR = CMakeFiles/crawler.dir
+
+build CMakeFiles/crawler.dir/src/Frontier.cpp.o: CXX_COMPILER__crawler_unscanned_Release /Users/adityarayapudi/eclipse-workspace/Crawler/src/Frontier.cpp || cmake_object_order_depends_target_crawler
+  CONFIG = Release
+  DEP_FILE = CMakeFiles/crawler.dir/src/Frontier.cpp.o.d
+  FLAGS = -O3 -DNDEBUG
+  INCLUDES = -I/Users/adityarayapudi/eclipse-workspace/Crawler/include -I/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local -isystem /opt/homebrew/include
+  OBJECT_DIR = CMakeFiles/crawler.dir
+  OBJECT_FILE_DIR = CMakeFiles/crawler.dir/src
+
+build CMakeFiles/crawler.dir/src/RedisReplyPtr.cpp.o: CXX_COMPILER__crawler_unscanned_Release /Users/adityarayapudi/eclipse-workspace/Crawler/src/RedisReplyPtr.cpp || cmake_object_order_depends_target_crawler
+  CONFIG = Release
+  DEP_FILE = CMakeFiles/crawler.dir/src/RedisReplyPtr.cpp.o.d
+  FLAGS = -O3 -DNDEBUG
+  INCLUDES = -I/Users/adityarayapudi/eclipse-workspace/Crawler/include -I/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local -isystem /opt/homebrew/include
+  OBJECT_DIR = CMakeFiles/crawler.dir
+  OBJECT_FILE_DIR = CMakeFiles/crawler.dir/src
+
+build CMakeFiles/crawler.dir/src/DNS_Resolver.cpp.o: CXX_COMPILER__crawler_unscanned_Release /Users/adityarayapudi/eclipse-workspace/Crawler/src/DNS_Resolver.cpp || cmake_object_order_depends_target_crawler
+  CONFIG = Release
+  DEP_FILE = CMakeFiles/crawler.dir/src/DNS_Resolver.cpp.o.d
+  FLAGS = -O3 -DNDEBUG
+  INCLUDES = -I/Users/adityarayapudi/eclipse-workspace/Crawler/include -I/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local -isystem /opt/homebrew/include
+  OBJECT_DIR = CMakeFiles/crawler.dir
+  OBJECT_FILE_DIR = CMakeFiles/crawler.dir/src
 
 
 # =============================================================================
@@ -65,7 +89,7 @@ build CMakeFiles/crawler.dir/Frontier.cpp.o: CXX_COMPILER__crawler_unscanned_Rel
 #############################################
 # Link the executable crawler
 
-build crawler: CXX_EXECUTABLE_LINKER__crawler_Release CMakeFiles/crawler.dir/Frontier.cpp.o | /opt/homebrew/lib/libcares.2.19.4.dylib
+build crawler: CXX_EXECUTABLE_LINKER__crawler_Release CMakeFiles/crawler.dir/main.cpp.o CMakeFiles/crawler.dir/src/Frontier.cpp.o CMakeFiles/crawler.dir/src/RedisReplyPtr.cpp.o CMakeFiles/crawler.dir/src/DNS_Resolver.cpp.o | /opt/homebrew/lib/libcares.2.19.4.dylib
   CONFIG = Release
   FLAGS = -O3 -DNDEBUG
   LINK_LIBRARIES = -Wl,-rpath,/opt/homebrew/lib  /opt/homebrew/lib/libcares.2.19.4.dylib  -lhiredis  -lresolv

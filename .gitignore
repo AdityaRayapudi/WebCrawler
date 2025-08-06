@@ -1,0 +1,17 @@
+build/
+build/**
+dump.rdb
+build/cmake.run.macosx.aarch64.Local/crawler
+build/cmake.run.macosx.aarch64.Local/compile_commands.json
+build/cmake.run.macosx.aarch64.Local/CMakeFiles/crawler.dir/Frontier.cpp.o
+build/cmake.run.macosx.aarch64.Local/build.ninja
+build/cmake.run.macosx.aarch64.Local/.ninja_log
+build/cmake.run.macosx.aarch64.Local/.ninja_deps
+build/cmake.run.macosx.aarch64.Local/crawler
+build/cmake.run.macosx.aarch64.Local/compile_commands.json
+build/cmake.run.macosx.aarch64.Local/CMakeFiles/crawler.dir/Frontier.cpp.o
+build/cmake.run.macosx.aarch64.Local/build.ninja
+build/cmake.run.macosx.aarch64.Local/.ninja_log
+build/cmake.run.macosx.aarch64.Local/.ninja_deps
+build/cmake.run.macosx.aarch64.Local/.ninja_deps
+build/cmake.run.macosx.aarch64.Local/.ninja_log

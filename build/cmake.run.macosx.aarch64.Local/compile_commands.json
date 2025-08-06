@@ -1,8 +1,26 @@
 [
 {
   "directory": "/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local",
-  "command": "/usr/bin/c++ -I/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local -isystem /opt/homebrew/include -O3 -DNDEBUG -o CMakeFiles/crawler.dir/Frontier.cpp.o -c /Users/adityarayapudi/eclipse-workspace/Crawler/Frontier.cpp",
-  "file": "/Users/adityarayapudi/eclipse-workspace/Crawler/Frontier.cpp",
-  "output": "CMakeFiles/crawler.dir/Frontier.cpp.o"
+  "command": "/usr/bin/c++ -I/Users/adityarayapudi/eclipse-workspace/Crawler/include -I/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local -isystem /opt/homebrew/include -O3 -DNDEBUG -o CMakeFiles/crawler.dir/main.cpp.o -c /Users/adityarayapudi/eclipse-workspace/Crawler/main.cpp",
+  "file": "/Users/adityarayapudi/eclipse-workspace/Crawler/main.cpp",
+  "output": "CMakeFiles/crawler.dir/main.cpp.o"
+},
+{
+  "directory": "/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local",
+  "command": "/usr/bin/c++ -I/Users/adityarayapudi/eclipse-workspace/Crawler/include -I/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local -isystem /opt/homebrew/include -O3 -DNDEBUG -o CMakeFiles/crawler.dir/src/Frontier.cpp.o -c /Users/adityarayapudi/eclipse-workspace/Crawler/src/Frontier.cpp",
+  "file": "/Users/adityarayapudi/eclipse-workspace/Crawler/src/Frontier.cpp",
+  "output": "CMakeFiles/crawler.dir/src/Frontier.cpp.o"
+},
+{
+  "directory": "/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local",
+  "command": "/usr/bin/c++ -I/Users/adityarayapudi/eclipse-workspace/Crawler/include -I/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local -isystem /opt/homebrew/include -O3 -DNDEBUG -o CMakeFiles/crawler.dir/src/RedisReplyPtr.cpp.o -c /Users/adityarayapudi/eclipse-workspace/Crawler/src/RedisReplyPtr.cpp",
+  "file": "/Users/adityarayapudi/eclipse-workspace/Crawler/src/RedisReplyPtr.cpp",
+  "output": "CMakeFiles/crawler.dir/src/RedisReplyPtr.cpp.o"
+},
+{
+  "directory": "/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local",
+  "command": "/usr/bin/c++ -I/Users/adityarayapudi/eclipse-workspace/Crawler/include -I/Users/adityarayapudi/eclipse-workspace/Crawler/build/cmake.run.macosx.aarch64.Local -isystem /opt/homebrew/include -O3 -DNDEBUG -o CMakeFiles/crawler.dir/src/DNS_Resolver.cpp.o -c /Users/adityarayapudi/eclipse-workspace/Crawler/src/DNS_Resolver.cpp",
+  "file": "/Users/adityarayapudi/eclipse-workspace/Crawler/src/DNS_Resolver.cpp",
+  "output": "CMakeFiles/crawler.dir/src/DNS_Resolver.cpp.o"
 }
 ]
