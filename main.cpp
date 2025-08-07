@@ -5,8 +5,6 @@
 #include <iostream>
 #include <hiredis/hiredis.h>
 
-//using namespace std;
-
 int main(){
 	// Connect to Redis DB
 	redisContext* c = redisConnect("127.0.0.1", 6379);
@@ -34,11 +32,22 @@ int main(){
 	for(int i = 0; i < readySeeds.reply->elements; i++){
 
 		std::string seed = readySeeds.reply->element[i]->str;
+
+
+		std::string query = "GET ip:" + seed;
+		RedisReplyPtr ip = RedisReplyPtr((redisReply *) redisCommand(c, query.c_str()));
+
+		// Lookup Ipv4 if not cached
+		if(ip.reply->str == NULL){
+			std::cout << "Searching for ipv4 of " << seed << "..." << std::endl;
+			resolver.lookup(seed);
+			continue;
+		}
+
+
 		std::string url = frontier.popUrl(seed);
 
-		resolver.lookup(url);
-
-//		std::cout << url << std::endl;
+		std::cout << ip.reply->str << url << std::endl;
 
 
 		frontier.reQueueSeed(seed);

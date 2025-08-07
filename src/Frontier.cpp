@@ -27,7 +27,7 @@ void Frontier::loadSeeds(std::string fileName){
 	int i = 0;
 	while(getline (seeds, url)){
 		// Create lists for each seed containing itself
-		std::string query = "RPUSH urls:" + url + " " + url;
+		std::string query = "RPUSH urls:" + url + " /";
 		redisReply* reply = (redisReply*) redisCommand(c, query.c_str());
 		freeReplyObject(reply);
 
