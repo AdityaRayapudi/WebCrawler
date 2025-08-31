@@ -6,6 +6,7 @@ import hashlib
 import time
 import json
 
+import asyncio
 
 class BrandPage:
     async def open_page(self, ip : str, seed : str, link: str):
@@ -30,12 +31,15 @@ class BrandPage:
             }
 
             self.browser = await playwright.chromium.launch(
+                proxy= {
+                    "server" : "https://127.0.0.1:8080"
+                },
                 args = [
-            f"--host-resolver-rules=MAP {seed} {ip}",
             "--ignore-certificate-errors",
             "--disable-blink-features=AutomationControlled",
+            "--disable-http2"
                 ],
-                # headless=False
+                headless=False
             )
 
             page = await self.browser.new_page()
@@ -240,10 +244,12 @@ class BrandPage:
          print("...closed page")
 
 
-# async def main():
-#     async with Stealth().use_async(async_playwright()) as playwright:
-#         brand = BrandPage()
-#         # await brand.open_page(playwright, "23.34.164.187", "www.nike.com", "/w/mens-socks-7ny3qznik1")
+async def main():
+    # async with Stealth().use_async(async_playwright()) as playwright:
+    brand = BrandPage()
+    await brand.open_page("23.34.164.187", "www.nike.com", "/w/mens-socks-7ny3qznik1")
+    # await brand.open_page("3", "www.apple.com", "/")
+
 #         dockers_data = await brand.open_page(playwright, "23.227.38.74", "us.dockers.com", "/products/ultimate-chino-slim-fit-794880220?variant=44611662905505&utm_source=google&utm_medium=cpc&adpos=&scid=scplp79488022003330&sc_intid=79488022003330&utm_source=google&utm_medium=cpc&utm_campaign=pmax-brand-mens-pants&gad_source=1&gad_campaignid=18154247935&gbraid=0AAAAAC-PRd6p8lSguPbrFVZzOVNr45XAM&gclid=Cj0KCQjwh5vFBhCyARIsAHBx2wwjQOEoYdpI6ejAhlEMOLesKQxj8O2f00UtUeAPFCQrGouB3KzYqkEaAmsNEALw_wcB")
 #         print(dockers_data)
         # await brand.open_page(playwright, "23.221.225.98", "www.calvinklein.us", "/en/men/apparel/tops/liquid-touch-slim-t-shirt-/4LC250G-LDY.html")
@@ -251,6 +257,8 @@ class BrandPage:
         # await brand.open_page(playwright, "23.34.165.183", "bananarepublic.gap.com", "/browse/product.do?pid=795943032&vid=1&pcid=10894&cid=10894&nav=meganav%3AMen%3AMEN%27S+CLOTHING%3APolos#pdp-page-content")
 
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
+    asyncio.run(main())
+    
     
 #         print("Hello World")

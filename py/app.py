@@ -1,31 +1,42 @@
 from fastapi import FastAPI
-from contextlib import asynccontextmanager
 from pydantic import BaseModel
 import asyncio
-from playwright.async_api import async_playwright, Playwright
-from playwright_stealth import Stealth
 
-from dynamic_scraper import BrandPage
-
+# from dynamic_scraper import BrandPage
+from scraper_manager import ScraperManager, WebPage
 
 class URL(BaseModel):
-    ip: str
     seed: str
-    q: str
+    link: str
 
-brand = BrandPage()
-
-# @asynccontextmanager
-# async def lifespan(app: FastAPI):
-#     with Stealth().use_async(async_playwright()) as playwright:
-            
+# brand = BrandPage()
+scraper_manager = ScraperManager()
 
 app = FastAPI()
 
 @app.post("/parsed-pages/")
 async def parse_page(url: URL):
     url_dict = url.model_dump()
-    ip, seed, q = [url_dict.get("ip"), url_dict.get("seed"), url_dict.get("q")]
-    page_data = await brand.open_page(ip = ip, seed= seed, link=q)
+    seed, link = url_dict.get("seed"), url_dict.get("link")
 
-    return page_data
+    await scraper_manager.start_browser(proxy_server = "https://127.0.0.1:8080", is_headless=True)
+
+
+    page : WebPage = await scraper_manager.open_page(seed, link)
+
+    await page.extract_data(seed=seed)
+
+    page_details = await page.get_final_details()
+
+    await scraper_manager.close()
+
+    return page_details
+    # return page_details
+
+# @app.post("/parsed-pages/")
+# async def parse_page(url: URL):
+#     url_dict = url.model_dump()
+#     ip, seed, q = [url_dict.get("ip"), url_dict.get("seed"), url_dict.get("q")]
+#     page_data = await brand.open_page(ip = ip, seed= seed, link=q)
+
+#     return page_data
