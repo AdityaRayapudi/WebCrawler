@@ -2,6 +2,7 @@ from playwright.async_api import async_playwright, Playwright
 from playwright_stealth import Stealth
 from lxml import html
 
+import hashlib
 import time
 import json
 
@@ -94,6 +95,9 @@ class BrandPage:
 
             urls = await self.get_relative_urls(page_html, seed)
             page_details["urls"].append(urls)
+
+            md5 = hashlib.md5(str(page_details).encode())
+            page_details["md5"] = md5.hexdigest()
 
             await self.close_page()
             return page_details
