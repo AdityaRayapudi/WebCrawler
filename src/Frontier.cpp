@@ -21,18 +21,23 @@ void Frontier::loadSeeds(std::string fileName){
 	const int QUERY_SPEED = 100;
 
 	std::string query;
-	std::string url;
+	std::string seed;
 	std::ifstream seeds(fileName);
 
 	int i = 0;
-	while(getline (seeds, url)){
+	while(getline (seeds, seed)){
 		// Create lists for each seed containing itself
-		std::string query = "RPUSH urls:" + url + " /";
+		std::string query = "RPUSH urls:" + seed + " /";
 		redisReply* reply = (redisReply*) redisCommand(c, query.c_str());
 		freeReplyObject(reply);
 
 		// Add all seeds to delayed queue with 0 delay
-		query = "ZADD delayed_queue " + std::to_string(time(0) + (int) floor(i / QUERY_SPEED)) + " " + url;
+		query = "ZADD delayed_queue " + std::to_string(time(0) + (int) floor(i / QUERY_SPEED)) + " " + seed;
+		reply = (redisReply*) redisCommand(c, query.c_str());
+		freeReplyObject(reply);
+
+		// Create BF filter for each brand with 0.001 error and an initial 5000 capacity
+		query = "BF.RESERVE seen:"  + seed + "0.001 5000";
 		reply = (redisReply*) redisCommand(c, query.c_str());
 		freeReplyObject(reply);
 
