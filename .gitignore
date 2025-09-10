@@ -4,3 +4,6 @@ dump.rdb
 py/__pycache__/
 py/env/
 
+.DS_Store
+.DS_Store
+py/app/__pycache__/app.cpython-313.pyc

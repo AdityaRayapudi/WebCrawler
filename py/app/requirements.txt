@@ -21,7 +21,6 @@ Flask==3.1.2
 greenlet==3.2.4
 h11==0.16.0
 h2==4.3.0
-hiredis==3.2.1
 hpack==4.1.0
 httpcore==1.0.9
 httptools==0.6.4
@@ -65,7 +64,6 @@ python-dotenv==1.1.1
 python-multipart==0.0.20
 python-slugify==8.0.4
 PyYAML==6.0.2
-redis==6.4.0
 requests==2.32.4
 rich==14.1.0
 rich-toolkit==0.14.9
