@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <hiredis/hiredis.h>
+#include <nlohmann/json.hpp>
 
 int main(){
 	// Connect to Redis DB
@@ -28,17 +29,18 @@ int main(){
 
 	RedisReplyPtr readySeeds = frontier.getReadySeeds();
 
+	const std::string web_scraper = "http://127.0.0.1:8000";
 
 	for(int i = 0; i < readySeeds.reply->elements; i++){
 
 		std::string seed = readySeeds.reply->element[i]->str;
 
 
-		std::string query = "GET ip:" + seed;
-		RedisReplyPtr ip = RedisReplyPtr((redisReply *) redisCommand(c, query.c_str()));
+		std::string query = "EXISTS ip:" + seed;
+		RedisReplyPtr ip_chached = RedisReplyPtr((redisReply *) redisCommand(c, query.c_str()));
 
 		// Lookup Ipv4 if not cached
-		if(ip.reply->str == NULL){
+		if(ip_chached.reply->str == NULL){
 			std::cout << "Searching for ipv4 of " << seed << "..." << std::endl;
 			resolver.lookup(seed);
 			continue;
@@ -46,8 +48,6 @@ int main(){
 
 
 		std::string url = frontier.popUrl(seed);
-
-		std::cout << ip.reply->str << url << std::endl;
 
 
 		frontier.reQueueSeed(seed);
