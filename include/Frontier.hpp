@@ -26,6 +26,10 @@ public:
 
 	void addUrl(std::string seed, std::string url);
 
+	void addToBf(std::string bfName, std::string seed, std::string value);
+
+	int checkBf(std::string bfName, std::string seed, std::string value);
+
 };
 
 #endif

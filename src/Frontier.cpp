@@ -36,8 +36,8 @@ void Frontier::loadSeeds(std::string fileName){
 		reply = (redisReply*) redisCommand(c, query.c_str());
 		freeReplyObject(reply);
 
-		// Create BF filter for each brand with 0.001 error and an initial 5000 capacity
-		query = "BF.RESERVE seen:"  + seed + "0.001 5000";
+		// Create BF filter for each brand with 0.001 error and an initial 10_000 capacity
+		query = "BF.RESERVE seen:"  + seed + " 0.001 10000";
 		reply = (redisReply*) redisCommand(c, query.c_str());
 		freeReplyObject(reply);
 
@@ -65,4 +65,17 @@ void Frontier::reQueueSeed(std::string seed, int delay){
 void Frontier::addUrl(std::string seed, std::string url){
 	std::string query = "LPUSH urls:" + seed + " " + url;
 	RedisReplyPtr((redisReply*) redisCommand(c, query.c_str()));
+}
+
+void Frontier::addToBf(std::string bfName, std::string seed, std::string value){
+	std::string query = "BF.ADD " + bfName + ":"  + seed + " " + value;
+	redisReply* reply = (redisReply*) redisCommand(c, query.c_str());
+	std::cout << reply->str << std::endl;
+}
+
+int Frontier::checkBf(std::string bfName, std::string seed, std::string value){
+	std::string query = "BF.EXISTS " + bfName + ":"  + seed + " " + value;
+	redisReply* reply = (redisReply*) redisCommand(c, query.c_str());
+
+	return reply->integer;
 }
