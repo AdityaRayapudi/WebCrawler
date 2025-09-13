@@ -7,9 +7,13 @@
 #include <hiredis/hiredis.h>
 #include <nlohmann/json.hpp>
 
-#include <typeinfo>
+#include <chrono>
+#include <thread>
 
 int main(){
+
+	std::cout << "--- Web Crawler ---" << "\n" << std::endl;
+
 	// Connect to Redis DB
 	redisContext* c = redisConnect("127.0.0.1", 6379);
 
@@ -23,6 +27,8 @@ int main(){
 		exit(1);
 	}
 
+	std::cout << "Redis Connected" << std::endl;
+
 	// Initialize frontier
 	Frontier frontier(c, "Seeds.txt");
 
@@ -35,42 +41,52 @@ int main(){
 	// Initialize Web Scraper to end-point
 	WebScraper webScraper("http://127.0.0.1:8000");
 
-	for(int i = 0; i < readySeeds.reply->elements; i++){
+	std::cout << "\n" << "-------------" << std::endl;
 
-		std::string seed = readySeeds.reply->element[i]->str;
+	// Main Crawler Loop
 
-		// Lookup Ipv4 if not cached
-		std::string query = "EXISTS ip:" + seed;
-		RedisReplyPtr ip_chached = RedisReplyPtr((redisReply *) redisCommand(c, query.c_str()));
+	for (int k = 0; k < 20; k++){
+		std::cout << k << std::endl;
+		for(int i = 0; i < readySeeds.reply->elements; i++){
 
-		if(ip_chached.reply->integer == 0){
-			std::cout << "Searching for ipv4 of " << seed << "..." << std::endl;
-			resolver.lookup(seed);
-			continue;
-		}
+			std::string seed = readySeeds.reply->element[i]->str;
 
-		// Get next url and parse it
-		std::string url = frontier.popUrl(seed);
-		nlohmann::json pageData = webScraper.parsePage(seed, url);
-
-		// Add current URL to seen Bloom Filter
-		frontier.addToBf("seen", seed, url);
-
-
-		// Add all unscraped urls to queue
-		for(std::string newUrl : pageData["urls"]){
-			// Skip url if already scrapped
-			if(frontier.checkBf("seen", seed, newUrl) == true){
-				std::cout << "Already scraped: " << seed << newUrl << std::endl;
+			// If ip is not cached use DNS Resolver
+			if(resolver.is_cached(seed) == false){
+				std::cout << "Searching for ipv4 of " << seed << "..." << std::endl;
+				resolver.lookup(seed);
 				continue;
 			}
 
-			std::cout << "New url: " << seed << newUrl << std::endl;
-			frontier.addUrl(seed, newUrl);
+			// Get next url and parse it
+			std::string url = frontier.popUrl(seed);
+			nlohmann::json pageData = webScraper.parsePage(seed, url);
+
+			// Add current URL to seen Bloom Filter
+			frontier.addToBf("seen", seed, url);
+
+			int duplicate_cout = 0;
+			int new_count = 0;
+
+			// Add all unscraped urls to queue
+			for(std::string newUrl : pageData["urls"]){
+				// Skip url if already scrapped
+				if(frontier.checkBf("seen", seed, newUrl) == true){
+					duplicate_cout += 1;
+					continue;
+				}
+
+				new_count += 1;
+				frontier.addUrl(seed, newUrl);
+			}
+
+			std::cout << "...found " << duplicate_cout << " duplicate links and " << new_count << " new links" << std::endl;
+			frontier.reQueueSeed(seed);
+
+			std::cout << "sleeping" << std::endl;
+//			std::this_thread::sleep_for(std::chrono::seconds(1));
+
 		}
-
-		frontier.reQueueSeed(seed);
 	}
-
 	redisFree(c);
 }
