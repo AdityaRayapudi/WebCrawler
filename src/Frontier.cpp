@@ -11,9 +11,10 @@
 //
 //RedisReplyPtr::~RedisReplyPtr() { freeReplyObject(reply); }
 
-Frontier::Frontier(redisContext *c, std::string seedFile){
-	this-> c = c;
+Frontier::Frontier(redisContext *c, std::string seedFile)
+	:c(c){
 	loadSeeds(seedFile);
+	std::cout << "URL Frontier Initialized" << std::endl;
 }
 
 
@@ -69,8 +70,7 @@ void Frontier::addUrl(std::string seed, std::string url){
 
 void Frontier::addToBf(std::string bfName, std::string seed, std::string value){
 	std::string query = "BF.ADD " + bfName + ":"  + seed + " " + value;
-	redisReply* reply = (redisReply*) redisCommand(c, query.c_str());
-	std::cout << reply->str << std::endl;
+	RedisReplyPtr((redisReply*) redisCommand(c, query.c_str()));
 }
 
 int Frontier::checkBf(std::string bfName, std::string seed, std::string value){
