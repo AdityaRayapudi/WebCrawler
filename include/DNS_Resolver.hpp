@@ -28,6 +28,8 @@ public:
 
 	void lookup(std::string domain);
 
+	bool is_cached(std::string seed);
+
 	~DNS_Resolver();
 };
 
