@@ -3,8 +3,8 @@
 #include <iostream>
 
 
-DNS_Resolver::DNS_Resolver(redisContext *c){
-	this->c = c;
+DNS_Resolver::DNS_Resolver(redisContext *c)
+	:c(c){
 
 	// Get only Ipv4 Info
 	hints.ai_family = AF_INET;
@@ -22,6 +22,8 @@ DNS_Resolver::DNS_Resolver(redisContext *c){
 	if (ares_init_options(&channel, &options, optmask) != ARES_SUCCESS) {
 		std::cout << "c-ares initialization issue" << std::endl;
 	}
+
+	std::cout << "DNS Resolver Initialized" << std::endl;
 }
 
 void DNS_Resolver::dns_callback(void *arg, int status, int timeouts, struct ares_addrinfo *result){
@@ -82,6 +84,14 @@ void DNS_Resolver::lookup(std::string domain){
 	memset(&hints, 0, sizeof(hints));
 	ares_getaddrinfo(channel, domain.c_str(), NULL, &hints, dns_callback, this);
 	ares_queue_wait_empty(channel, -1);
+}
+
+bool DNS_Resolver::is_cached(std::string seed){
+	// Lookup Ipv4 if not cached
+	std::string query = "EXISTS ip:" + seed;
+	RedisReplyPtr ip_chached = RedisReplyPtr((redisReply *) redisCommand(c, query.c_str()));
+
+	return ip_chached.reply->integer;
 }
 
 

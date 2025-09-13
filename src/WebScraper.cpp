@@ -7,6 +7,7 @@ using json = nlohmann::json;
 
 WebScraper::WebScraper(std::string endpoint)
 	: client(std::make_unique<httplib::Client>(endpoint)){
+	std::cout << "Web Scraper Connected" << std::endl;
 }
 
 
