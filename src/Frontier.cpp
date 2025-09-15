@@ -4,7 +4,7 @@
 #include <fstream>
 #include <cmath>
 #include <ctime>
-
+#include <unistd.h>
 
 //// Redis Reply Pointer that will free itself at tend of scope
 //RedisReplyPtr::RedisReplyPtr(redisReply* r) : reply(r){}
@@ -58,24 +58,51 @@ std::string Frontier::popUrl(std::string seed){
 	return url.reply->str;
 }
 
+int Frontier::checkBf(std::string bfPrefix, std::string seed, std::string value){
+
+	std::string query = bfPrefix + ":" + seed;
+
+	const char* argv[] = {
+			"BF.EXISTS",
+			query.c_str(),
+			value.c_str()
+	};
+
+	size_t argvlen[3] = {
+			strlen(argv[0]),
+			query.size(),
+			value.size()
+	};
+
+	RedisReplyPtr exists = RedisReplyPtr((redisReply *) redisCommandArgv(c, 3, argv, argvlen));
+
+	return exists.reply->integer;
+}
+
 void Frontier::reQueueSeed(std::string seed, int delay){
 	std::string query = "ZADD delayed_queue " + std::to_string(time(0) + delay) + " " + seed;
 	RedisReplyPtr((redisReply*) redisCommand(c, query.c_str()));
 }
 
 void Frontier::addUrl(std::string seed, std::string url){
-	std::string query = "LPUSH urls:" + seed + " " + url;
-	RedisReplyPtr((redisReply*) redisCommand(c, query.c_str()));
+	std::string query =  "urls:" + seed;
+
+	const char* argv[] = {
+			"LPUSH",
+			query.c_str(),
+			url.c_str()
+	};
+
+	size_t argvlen[3] = {
+			strlen(argv[0]),
+			query.size(),
+			url.size()
+	};
+
+	RedisReplyPtr x = RedisReplyPtr((redisReply *) redisCommandArgv(c, 3, argv, argvlen));
 }
 
 void Frontier::addToBf(std::string bfName, std::string seed, std::string value){
 	std::string query = "BF.ADD " + bfName + ":"  + seed + " " + value;
 	RedisReplyPtr((redisReply*) redisCommand(c, query.c_str()));
-}
-
-int Frontier::checkBf(std::string bfName, std::string seed, std::string value){
-	std::string query = "BF.EXISTS " + bfName + ":"  + seed + " " + value;
-	redisReply* reply = (redisReply*) redisCommand(c, query.c_str());
-
-	return reply->integer;
 }

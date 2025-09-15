@@ -50,6 +50,7 @@ int main(){
 		for(int i = 0; i < readySeeds.reply->elements; i++){
 
 			std::string seed = readySeeds.reply->element[i]->str;
+			std::cout << "Run 1" << std::endl;
 
 			// If ip is not cached use DNS Resolver
 			if(resolver.is_cached(seed) == false){
@@ -58,6 +59,8 @@ int main(){
 				continue;
 			}
 
+			std::cout << "Run 2" << std::endl;
+
 			// Get next url and parse it
 			std::string url = frontier.popUrl(seed);
 			nlohmann::json pageData = webScraper.parsePage(seed, url);
@@ -65,28 +68,32 @@ int main(){
 			// Add current URL to seen Bloom Filter
 			frontier.addToBf("seen", seed, url);
 
-			int duplicate_cout = 0;
-			int new_count = 0;
+			std::cout << "Run 3" << std::endl;
 
-			// Add all unscraped urls to queue
-			for(std::string newUrl : pageData["urls"]){
-				// Skip url if already scrapped
-				if(frontier.checkBf("seen", seed, newUrl) == true){
-					duplicate_cout += 1;
-					continue;
+			try{
+				// Add all unscraped urls to queue
+				for(std::string newUrl : pageData["urls"]){
+					// Skip url if already scrapped
+					if(frontier.checkBf("seen", seed, newUrl) == 1){
+						continue;
+					}
+
+					frontier.addUrl(seed, newUrl);
 				}
-
-				new_count += 1;
-				frontier.addUrl(seed, newUrl);
+			}catch(int errorCode){
+				std::cout << errorCode << std::endl;
 			}
 
-			std::cout << "...found " << duplicate_cout << " duplicate links and " << new_count << " new links" << std::endl;
+
+			std::cout << "Run 4" << std::endl;
+
 			frontier.reQueueSeed(seed);
 
 			std::cout << "sleeping" << std::endl;
 //			std::this_thread::sleep_for(std::chrono::seconds(1));
 
 		}
+
 	}
 	redisFree(c);
 }

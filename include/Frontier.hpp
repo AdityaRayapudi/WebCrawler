@@ -22,13 +22,14 @@ public:
 
 	std::string popUrl(std::string seed);
 
+	int checkBf(std::string bfName, std::string seed, std::string value);
+
 	void reQueueSeed(std::string seed, int delay = 2);
 
 	void addUrl(std::string seed, std::string url);
 
 	void addToBf(std::string bfName, std::string seed, std::string value);
 
-	int checkBf(std::string bfName, std::string seed, std::string value);
 
 };
 
