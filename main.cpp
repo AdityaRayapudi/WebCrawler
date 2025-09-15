@@ -4,11 +4,10 @@
 #include "WebScraper.hpp"
 
 #include <iostream>
+#include <unistd.h>
 #include <hiredis/hiredis.h>
 #include <nlohmann/json.hpp>
 
-#include <chrono>
-#include <thread>
 
 int main(){
 
@@ -36,8 +35,6 @@ int main(){
 	DNS_Resolver resolver(c);
 
 
-	RedisReplyPtr readySeeds = frontier.getReadySeeds();
-
 	// Initialize Web Scraper to end-point
 	WebScraper webScraper("http://127.0.0.1:8000");
 
@@ -46,11 +43,11 @@ int main(){
 	// Main Crawler Loop
 
 	for (int k = 0; k < 20; k++){
-		std::cout << k << std::endl;
+		RedisReplyPtr readySeeds = frontier.getReadySeeds();
+
 		for(int i = 0; i < readySeeds.reply->elements; i++){
 
 			std::string seed = readySeeds.reply->element[i]->str;
-			std::cout << "Run 1" << std::endl;
 
 			// If ip is not cached use DNS Resolver
 			if(resolver.is_cached(seed) == false){
@@ -59,8 +56,6 @@ int main(){
 				continue;
 			}
 
-			std::cout << "Run 2" << std::endl;
-
 			// Get next url and parse it
 			std::string url = frontier.popUrl(seed);
 			nlohmann::json pageData = webScraper.parsePage(seed, url);
@@ -68,30 +63,17 @@ int main(){
 			// Add current URL to seen Bloom Filter
 			frontier.addToBf("seen", seed, url);
 
-			std::cout << "Run 3" << std::endl;
-
-			try{
-				// Add all unscraped urls to queue
-				for(std::string newUrl : pageData["urls"]){
-					// Skip url if already scrapped
-					if(frontier.checkBf("seen", seed, newUrl) == 1){
-						continue;
-					}
-
-					frontier.addUrl(seed, newUrl);
+			// Add all unscraped urls to queue
+			for(std::string newUrl : pageData["urls"]){
+				// Skip url if already scrapped
+				if(frontier.checkBf("seen", seed, newUrl) == 1){
+					continue;
 				}
-			}catch(int errorCode){
-				std::cout << errorCode << std::endl;
+
+				frontier.addUrl(seed, newUrl);
 			}
 
-
-			std::cout << "Run 4" << std::endl;
-
 			frontier.reQueueSeed(seed);
-
-			std::cout << "sleeping" << std::endl;
-//			std::this_thread::sleep_for(std::chrono::seconds(1));
-
 		}
 
 	}

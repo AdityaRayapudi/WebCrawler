@@ -4,12 +4,7 @@
 #include <fstream>
 #include <cmath>
 #include <ctime>
-#include <unistd.h>
 
-//// Redis Reply Pointer that will free itself at tend of scope
-//RedisReplyPtr::RedisReplyPtr(redisReply* r) : reply(r){}
-//
-//RedisReplyPtr::~RedisReplyPtr() { freeReplyObject(reply); }
 
 Frontier::Frontier(redisContext *c, std::string seedFile)
 	:c(c){
@@ -99,7 +94,7 @@ void Frontier::addUrl(std::string seed, std::string url){
 			url.size()
 	};
 
-	RedisReplyPtr x = RedisReplyPtr((redisReply *) redisCommandArgv(c, 3, argv, argvlen));
+	RedisReplyPtr((redisReply *) redisCommandArgv(c, 3, argv, argvlen));
 }
 
 void Frontier::addToBf(std::string bfName, std::string seed, std::string value){
