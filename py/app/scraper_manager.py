@@ -89,7 +89,7 @@ class WebPage:
             await self.scroll_content()
         
         urls = await self.get_relative_urls(self.html, seed)
-        self.details["urls"].append(urls)
+        self.details["urls"].extend(urls)
 
 
     async def extract_product_data(self):
@@ -124,7 +124,7 @@ class WebPage:
 
         # Set scrapped images
         images = await WebPage.get_images(self.page, self.ld_json["name"])
-        self.details["product"]["scrapped_images"].append(images)
+        self.details["product"]["scrapped_images"].extend(images)
 
         print("images extracted...")
 
@@ -143,17 +143,17 @@ class WebPage:
             current_height = await self.page.evaluate("document.body.scrollHeight")
             current_time = time.time()
 
-            print("More Content :", not (current_height == previous_height) )
-            print("Time passed :", current_time - previous_time)
+            # print("More Content :", not (current_height == previous_height) )
+            # print("Time passed :", current_time - previous_time)
 
             # If 3 seconds have elapsed and scroll heights has not changed end loop
             if ((current_height == previous_height) and (current_time - previous_time >= scroll_time)):
                 unexplored_content = False
             # Set new previous time & height if no new content is loaded
             elif (current_height != previous_height):
-                if self.page.is_visible("text='Load More'"):
-                    self.page.hover("text='Load More'")
-                    self.page.click("text='Load More'")
+                if await self.page.is_visible("text='Load More'"):
+                    await self.page.hover("text='Load More'")
+                    await self.page.click("text='Load More'")
                 previous_time = current_time
                 previous_height = current_height
 
@@ -184,6 +184,11 @@ class WebPage:
 
             if seed in url:
                 url = url.removeprefix("https://" + seed)
+                if url == "":
+                    continue
+                if url.startswith("/") == False:
+                    continue
+                
                 relative_urls.append(url)
 
         return relative_urls
