@@ -47,10 +47,26 @@ RedisReplyPtr Frontier::getReadySeeds(){
 	return RedisReplyPtr((redisReply*) redisCommand(c, query.c_str()));
 }
 
+int Frontier::remainingSeeds(){
+	std::string query = "ZCOUNT delayed_queue -inf +inf";
+	RedisReplyPtr seeds = RedisReplyPtr((redisReply*) redisCommand(c, query.c_str()));
+	return seeds.reply->integer;
+}
+
 std::string Frontier::popUrl(std::string seed){
 	std::string query = "LPOP urls:" + seed;
 	RedisReplyPtr url = RedisReplyPtr((redisReply *) redisCommand(c, query.c_str()));
+
+	if(url.reply->type == REDIS_REPLY_NIL){
+		return "";
+	}
+
 	return url.reply->str;
+}
+
+void Frontier::removeSeed(std::string seed){
+	std::string query = "ZREM delayed_queue " + seed;
+	RedisReplyPtr((redisReply *) redisCommand(c, query.c_str()));
 }
 
 int Frontier::checkBf(std::string bfPrefix, std::string seed, std::string value){

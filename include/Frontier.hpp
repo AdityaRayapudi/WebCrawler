@@ -20,7 +20,11 @@ public:
 
 	RedisReplyPtr getReadySeeds();
 
+	int remainingSeeds();
+
 	std::string popUrl(std::string seed);
+
+	void removeSeed(std::string seed);
 
 	int checkBf(std::string bfName, std::string seed, std::string value);
 

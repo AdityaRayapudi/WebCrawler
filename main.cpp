@@ -38,11 +38,10 @@ int main(){
 	// Initialize Web Scraper to end-point
 	WebScraper webScraper("http://127.0.0.1:8000");
 
-	std::cout << "\n" << "-------------" << std::endl;
+	std::cout << "\n" << "-------------------" << std::endl;
 
 	// Main Crawler Loop
-
-	for (int k = 0; k < 20; k++){
+	while(frontier.remainingSeeds() > 0){
 		RedisReplyPtr readySeeds = frontier.getReadySeeds();
 
 		for(int i = 0; i < readySeeds.reply->elements; i++){
@@ -58,6 +57,14 @@ int main(){
 
 			// Get next url and parse it
 			std::string url = frontier.popUrl(seed);
+
+			// If no more urls to scrape remove seed
+			if(url == ""){
+				frontier.removeSeed(seed);
+				std::cout << "... " << seed << " crawled" << std::endl;
+				continue;
+			}
+
 			nlohmann::json pageData = webScraper.parsePage(seed, url);
 
 			// Add current URL to seen Bloom Filter
