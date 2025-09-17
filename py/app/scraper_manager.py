@@ -19,7 +19,8 @@ class ScraperManager:
             args = [
                 "--ignore-certificate-errors",
                 "--disable-blink-features=AutomationControlled",
-                "--disable-http2"
+                "--disable-http2",
+                "--no-sandbox"
             ],
             headless = is_headless,
         )

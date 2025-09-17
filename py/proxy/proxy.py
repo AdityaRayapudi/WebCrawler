@@ -2,7 +2,7 @@ from mitmproxy import http
 import redis
 
 # Connect to Redis
-r = redis.Redis(host='127.0.0.1', port=6379, decode_responses=True)
+r = redis.Redis(host='redisdb', port=6379, decode_responses=True)
 
 def request(flow : http.HTTPFlow) -> None:
     host = flow.request.pretty_host

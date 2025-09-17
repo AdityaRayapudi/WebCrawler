@@ -1,0 +1,19 @@
+services:
+  redisdb:
+    image: redis:latest
+    
+  proxy:
+    build:
+      context: .
+      dockerfile: Docker/proxy.Dockerfile
+    depends_on:
+      - redisdb
+
+  scraper:
+    build:
+      context: .
+      dockerfile: Docker/scraper.Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - proxy

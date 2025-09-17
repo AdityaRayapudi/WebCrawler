@@ -7,3 +7,4 @@ py/env/
 .DS_Store
 .DS_Store
 py/app/__pycache__/app.cpython-313.pyc
+py/app/__pycache__/scraper_manager.cpython-313.pyc

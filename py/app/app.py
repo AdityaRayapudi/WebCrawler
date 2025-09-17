@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-import asyncio
 
 from scraper_manager import ScraperManager, WebPage
 
@@ -17,7 +16,7 @@ async def parse_page(url: URL):
     url_dict = url.model_dump()
     seed, link = url_dict.get("seed"), url_dict.get("link")
 
-    await scraper_manager.start_browser(proxy_server = "https://127.0.0.1:8080", is_headless=True)
+    await scraper_manager.start_browser(proxy_server = "https://proxy:8080", is_headless=True)
 
 
     page : WebPage = await scraper_manager.open_page(seed, link)
