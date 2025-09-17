@@ -29,7 +29,7 @@ int main(){
 	std::cout << "Redis Connected" << std::endl;
 
 	// Initialize frontier
-	Frontier frontier(c, "Seeds.txt");
+	Frontier frontier(c, "cpp/Seeds.txt");
 
 	// Initialize DNS Resolver
 	DNS_Resolver resolver(c);
