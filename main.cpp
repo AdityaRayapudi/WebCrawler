@@ -10,11 +10,10 @@
 
 
 int main(){
-
 	std::cout << "--- Web Crawler ---" << "\n" << std::endl;
 
 	// Connect to Redis DB
-	redisContext* c = redisConnect("127.0.0.1", 6379);
+	redisContext* c = redisConnect("redisdb", 6379);
 
 	// Check for NULL or Error
 	if (c == NULL || c->err){
@@ -29,18 +28,18 @@ int main(){
 	std::cout << "Redis Connected" << std::endl;
 
 	// Initialize frontier
-	Frontier frontier(c, "cpp/Seeds.txt");
+	Frontier frontier(c, "/usr/local/bin/Seeds.txt");
 
 	// Initialize DNS Resolver
 	DNS_Resolver resolver(c);
 
 
 	// Initialize Web Scraper to end-point
-	WebScraper webScraper("http://127.0.0.1:8000");
+	WebScraper webScraper("http://scraper:80");
 
 	std::cout << "\n" << "-------------------" << std::endl;
 
-	// Main Crawler Loop
+	//Main Crawler Loop
 	while(frontier.remainingSeeds() > 0){
 		RedisReplyPtr readySeeds = frontier.getReadySeeds();
 

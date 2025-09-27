@@ -20,6 +20,11 @@ void Frontier::loadSeeds(std::string fileName){
 	std::string seed;
 	std::ifstream seeds(fileName);
 
+	if(!seeds.is_open()){
+		std::cerr << "File not open" << std::endl;
+		return;
+	}
+
 	int i = 0;
 	while(getline (seeds, seed)){
 		// Create lists for each seed containing itself

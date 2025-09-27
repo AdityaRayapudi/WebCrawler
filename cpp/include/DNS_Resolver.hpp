@@ -8,6 +8,7 @@
 #include <arpa/inet.h>
 #include <string>
 #include <unordered_set>
+#include <cstring>
 
 class DNS_Resolver{
 private:

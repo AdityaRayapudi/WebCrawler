@@ -6,7 +6,7 @@
 
 #include <string>
 #include <hiredis/hiredis.h>
-
+#include <cstring>
 
 
 class Frontier {
